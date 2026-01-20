@@ -120,6 +120,7 @@ const renderer = new THREE.WebGLRenderer({ canvas: canvas })
 renderer.setSize(size.width, size.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = true
+renderer.shadowMap.type = THREE.PCFSoftShadowMap // Radius don't work with this
 
 // Controler
 const controller = new OrbitControls(camera, canvas)
