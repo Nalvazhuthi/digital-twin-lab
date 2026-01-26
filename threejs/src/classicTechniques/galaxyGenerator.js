@@ -12,6 +12,8 @@ const scene = new THREE.Scene();
 const parameters = {};
 parameters.count = 100000;
 parameters.size = 0.01;
+parameters.radius = 2;
+parameters.branches = 3;
 
 const geometry = new THREE.BufferGeometry();
 let material = null;
@@ -26,9 +28,14 @@ const galaxtGenerator = () => {
   const vertices = new Float32Array(parameters.count * 3);
   for (let i = 0; i <= parameters.count; i++) {
     const i3 = i * 3;
-    vertices[i3 + 0] = Math.random() - 0.5;
-    vertices[i3 + 1] = Math.random() - 0.5;
-    vertices[i3 + 2] = Math.random() - 0.5;
+
+    const radius = Math.random() * parameters.radius;
+    const branchAngle =
+    ((i % parameters.branches) / parameters.branches) * Math.PI * 2;
+
+    vertices[i3 + 0] = Math.cos(branchAngle) * radius;
+    vertices[i3 + 1] = 0;
+    vertices[i3 + 2] = Math.sin(branchAngle) * radius;
   }
 
   geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
@@ -54,6 +61,18 @@ gui
   .max(0.1)
   .step(0.001)
   .onFinishChange(galaxtGenerator);
+gui
+  .add(parameters, "radius")
+  .min(1)
+  .max(20)
+  .step(1)
+  .onFinishChange(galaxtGenerator);
+gui
+  .add(parameters, "branches")
+  .min(2)
+  .max(5)
+  .step(1)
+  .onFinishChange(galaxtGenerator);
 
 // Camera
 const size = {
@@ -61,6 +80,8 @@ const size = {
   height: window.innerHeight,
 };
 const camera = new THREE.PerspectiveCamera(75, size.width / size.height);
+camera.position.x = 3;
+camera.position.y = 3;
 camera.position.z = 3;
 scene.add(camera);
 
