@@ -14,6 +14,8 @@ parameters.count = 100000;
 parameters.size = 0.01;
 parameters.radius = 2;
 parameters.branches = 3;
+parameters.spin = 3;
+parameters.randomness = 0.3;
 
 const geometry = new THREE.BufferGeometry();
 let material = null;
@@ -31,11 +33,14 @@ const galaxtGenerator = () => {
 
     const radius = Math.random() * parameters.radius;
     const branchAngle =
-    ((i % parameters.branches) / parameters.branches) * Math.PI * 2;
-
-    vertices[i3 + 0] = Math.cos(branchAngle) * radius;
-    vertices[i3 + 1] = 0;
-    vertices[i3 + 2] = Math.sin(branchAngle) * radius;
+      ((i % parameters.branches) / parameters.branches) * Math.PI * 2;
+    const spinAngle = radius * parameters.spin;
+    const randomX = (Math.random() - 0.5) * parameters.randomness;
+    const randomY = (Math.random() - 0.5) * parameters.randomness;
+    const randomZ = (Math.random() - 0.5) * parameters.randomness;
+    vertices[i3 + 0] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+    vertices[i3 + 1] = randomY;
+    vertices[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
   }
 
   geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
@@ -72,6 +77,18 @@ gui
   .min(2)
   .max(5)
   .step(1)
+  .onFinishChange(galaxtGenerator);
+gui
+  .add(parameters, "spin")
+  .min(-5)
+  .max(5)
+  .step(0.1)
+  .onFinishChange(galaxtGenerator);
+gui
+  .add(parameters, "randomness")
+  .min(0)
+  .max(5)
+  .step(0.1)
   .onFinishChange(galaxtGenerator);
 
 // Camera
