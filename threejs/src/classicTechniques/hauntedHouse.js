@@ -26,6 +26,22 @@ const floorNorTexture = textureLoader.load(
 
 floorColorTexture.colorSpace = THREE.SRGBColorSpace;
 
+floorARMTexture.repeat.set(8,8)
+floorColorTexture.repeat.set(8,8)
+floorDispTexture.repeat.set(8,8)
+floorNorTexture.repeat.set(8,8)
+
+floorARMTexture.wrapS = THREE.RepeatWrapping
+floorColorTexture.wrapS = THREE.RepeatWrapping
+floorDispTexture.wrapS = THREE.RepeatWrapping
+floorNorTexture.wrapS = THREE.RepeatWrapping
+
+
+floorARMTexture.wrapT = THREE.RepeatWrapping
+floorColorTexture.wrapT = THREE.RepeatWrapping
+floorDispTexture.wrapT = THREE.RepeatWrapping
+floorNorTexture.wrapT = THREE.RepeatWrapping
+
 // GUI Folders
 const ambientLightFolder = gui.addFolder("Ambient Light");
 const directionalLightFolder = gui.addFolder("Directional Light");
@@ -142,8 +158,8 @@ const floor = new THREE.Mesh(
     metalnessMap: floorARMTexture,
     normalMap: floorNorTexture,
     displacementMap: floorDispTexture,
-    // displacementScale: 0.3,
-    // displacementBias: -0.2,
+    displacementScale: 0.3,
+    displacementBias: -0.2,
     transparent: true,
   }),
 );
