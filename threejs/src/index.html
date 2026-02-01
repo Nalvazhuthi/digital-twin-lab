@@ -10,12 +10,39 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        overflow: hidden;
+        /* overflow: hidden; */
+      }
+      html{
+        background-color: #1e1a20;
+      }
+      .webgl {
+        position: fixed;
+        top: 0;
+        left: 0;
+        outline: none;
+      }
+
+      .section {
+        display: flex;
+        align-items: center;
+        height: 100vh;
+        position: relative;
+        font-family: "Cabin", sans-serif;
+        color: #ffeded;
+        text-transform: uppercase;
+        font-size: 7vmin;
+        padding-left: 10%;
+        padding-right: 10%;
+      }
+
+      h1,
+      h2 {
+        color: rgb(255, 255, 255);
       }
     </style>
   </head>
   <body>
-    <canvas class="webgl"></canvas>
+    <canvas class="webgl"> </canvas>
     <!-- <script type="module" src="./script.js"></script> -->
     <!-- <script type="module" src="./basics/texture.js"></script> -->
     <!-- <script type="module" src="./basics/material.js"></script> -->
@@ -28,10 +55,23 @@
     <!-- <script type="module" src="./exercise/basic.js"></script> -->
 
     <!-- Classic techniques -->
-     <!-- <script type="module" src="./classicTechniques/light.js"></script> -->
-     <!-- <script type="module" src="./classicTechniques/shadow.js"></script> -->
-     <!-- <script type="module" src="./classicTechniques/hauntedHouse.js"></script> -->
-     <!-- <script type="module" src="./classicTechniques/particles.js"></script> -->
-    <script type="module" src="./classicTechniques/galaxyGenerator.js"></script>
+    <!-- <script type="module" src="./classicTechniques/light.js"></script> -->
+    <!-- <script type="module" src="./classicTechniques/shadow.js"></script> -->
+    <!-- <script type="module" src="./classicTechniques/hauntedHouse.js"></script> -->
+    <!-- <script type="module" src="./classicTechniques/particles.js"></script> -->
+    <!-- <script type="module" src="./classicTechniques/galaxyGenerator.js"></script> -->
+    <section class="section">
+      <h1>My Portfolio</h1>
+    </section>
+    <section class="section">
+      <h2>My projects</h2>
+    </section>
+    <section class="section">
+      <h2>Contact me</h2>
+    </section>
+    <script
+      type="module"
+      src="./classicTechniques/scrollbasedanimation.js"
+    ></script>
   </body>
 </html>
