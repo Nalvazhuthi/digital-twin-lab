@@ -15,6 +15,10 @@ const parameters = {
 // Scene
 const scene = new THREE.Scene();
 
+// Camera Group
+const cameraGroup = new THREE.Group();
+scene.add(cameraGroup);
+
 // Light
 const directionalLight = new THREE.DirectionalLight("#ffffff", 1);
 directionalLight.position.set(1, 1, 0);
@@ -36,9 +40,15 @@ const mesh3 = new THREE.Mesh(
   new THREE.TorusKnotGeometry(0.8, 0.35, 100, 16),
   material,
 );
+
+mesh1.position.x = 2;
+mesh2.position.x = -2;
+mesh3.position.x = 2;
+
 mesh1.position.y = -objectsDistance * 0;
 mesh2.position.y = -objectsDistance * 1;
 mesh3.position.y = -objectsDistance * 2;
+
 scene.add(mesh1, mesh2, mesh3);
 const sectionMeshes = [mesh1, mesh2, mesh3];
 // Camera
@@ -48,7 +58,7 @@ const size = {
 };
 const camera = new THREE.PerspectiveCamera(75, size.width / size.height);
 camera.position.z = 3;
-scene.add(camera);
+cameraGroup.add(camera);
 
 // renderer
 const canvas = document.querySelector("canvas.webgl");
@@ -78,15 +88,34 @@ window.addEventListener("scroll", () => {
   console.log(scrollY);
 });
 
+const cursor = {
+  x: 0,
+  y: 0,
+};
+window.addEventListener("mousemove", (e) => {
+  cursor.x = e.clientX / size.width - 0.5;
+  cursor.y = -(e.clientY / size.height - 0.5);
+});
+
 // Animation
 const clock = new THREE.Clock();
+let previousTime = 0;
 const tick = () => {
   const elapseTime = clock.getElapsedTime();
+  const deltaTime = elapseTime - previousTime;
+  previousTime = elapseTime;
+
   for (const mesh of sectionMeshes) {
     mesh.rotation.x = elapseTime * 0.1;
     mesh.rotation.y = elapseTime * 0.12;
   }
   camera.position.y = (-scrollY / size.height) * objectsDistance;
+
+  const parallaxX = cursor.x;
+  const parallaxY = cursor.y;
+  cameraGroup.position.x += (parallaxX - cameraGroup.position.x) * 5*deltaTime;
+  cameraGroup.position.y += (parallaxY - cameraGroup.position.y) * 5*deltaTime;
+
   renderer.render(scene, camera);
   window.requestAnimationFrame(tick);
 };
