@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import GUI from "lil-gui";
+import { gsap } from "gsap";
 
 const gui = new GUI();
 const textureLoader = new THREE.TextureLoader();
@@ -28,9 +29,7 @@ const material = new THREE.MeshToonMaterial({
   color: parameters.materialColor,
   gradientMap: gradiantTexture,
 });
-gui.addColor(parameters, "materialColor").onChange(() => {
-  material.color.set(parameters.materialColor);
-});
+
 
 const objectsDistance = 4;
 
@@ -51,6 +50,32 @@ mesh3.position.y = -objectsDistance * 2;
 
 scene.add(mesh1, mesh2, mesh3);
 const sectionMeshes = [mesh1, mesh2, mesh3];
+
+// Particles
+const count = 1000
+const ParticlesGeometry = new THREE.BufferGeometry()
+const vertices = new Float32Array(count * 3)
+
+for (let i = 0; i <= count; i++) {
+  const x = i * 3
+  vertices[x] = (Math.random() - 0.5) * 10
+  vertices[x + 1] = objectsDistance * 0.5 - Math.random() * objectsDistance * 3
+  vertices[x + 2] = (Math.random() - 0.5) * 10
+}
+ParticlesGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
+const ParticlesMaterial = new THREE.PointsMaterial({
+  size: 0.02
+})
+const particles = new THREE.Points(ParticlesGeometry, ParticlesMaterial)
+scene.add(particles)
+
+
+gui.addColor(parameters, "materialColor").onChange(() => {
+  material.color.set(parameters.materialColor);
+  ParticlesMaterial.color.set(parameters.materialColor)
+});
+
+
 // Camera
 const size = {
   width: window.innerWidth,
@@ -82,10 +107,20 @@ window.addEventListener("resize", () => {
 // controls.enableDamping = true;
 
 // Scroll Controll
+let currentSection = 0
 let scrollY = window.scrollY;
 window.addEventListener("scroll", () => {
   scrollY = window.scrollY;
-  console.log(scrollY);
+  const newSection = Math.round(scrollY / size.height)
+  if (currentSection != newSection) {
+    currentSection = newSection
+    gsap.to(sectionMeshes[currentSection].rotation, {
+      duration: 1.5,
+      ease: "power2.inOut",
+      x: "+=8",
+      y: "+=3"
+    })
+  }
 });
 
 const cursor = {
@@ -106,15 +141,15 @@ const tick = () => {
   previousTime = elapseTime;
 
   for (const mesh of sectionMeshes) {
-    mesh.rotation.x = elapseTime * 0.1;
-    mesh.rotation.y = elapseTime * 0.12;
+    mesh.rotation.x += deltaTime * 0.1;
+    mesh.rotation.y += deltaTime * 0.12;
   }
   camera.position.y = (-scrollY / size.height) * objectsDistance;
 
   const parallaxX = cursor.x;
   const parallaxY = cursor.y;
-  cameraGroup.position.x += (parallaxX - cameraGroup.position.x) * 5*deltaTime;
-  cameraGroup.position.y += (parallaxY - cameraGroup.position.y) * 5*deltaTime;
+  cameraGroup.position.x += (parallaxX - cameraGroup.position.x) * 5 * deltaTime;
+  cameraGroup.position.y += (parallaxY - cameraGroup.position.y) * 5 * deltaTime;
 
   renderer.render(scene, camera);
   window.requestAnimationFrame(tick);
