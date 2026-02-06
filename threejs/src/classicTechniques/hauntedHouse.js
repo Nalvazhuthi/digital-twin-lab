@@ -26,10 +26,10 @@ const floorNorTexture = textureLoader.load(
 
 floorColorTexture.colorSpace = THREE.SRGBColorSpace;
 
-floorARMTexture.repeat.set(8,8)
-floorColorTexture.repeat.set(8,8)
-floorDispTexture.repeat.set(8,8)
-floorNorTexture.repeat.set(8,8)
+floorARMTexture.repeat.set(8, 8)
+floorColorTexture.repeat.set(8, 8)
+floorDispTexture.repeat.set(8, 8)
+floorNorTexture.repeat.set(8, 8)
 
 floorARMTexture.wrapS = THREE.RepeatWrapping
 floorColorTexture.wrapS = THREE.RepeatWrapping
